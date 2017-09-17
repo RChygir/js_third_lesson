@@ -1,0 +1,28 @@
+#cont {
+    display: inline-block;
+}
+
+#field {
+    display: block;
+    border: 10px solid #555;
+    border-top: 11px solid #555;
+    border-left: 11px solid #555;
+    margin: 10px auto;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
+}
+
+#field .cell {
+    float: left;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background: #BBB;
+    color: #FFF;
+    line-height: 20px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: sans-serif;
+    border-bottom: 1px solid #555;
+    border-right: 1px solid #555;
+}

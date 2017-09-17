@@ -1,0 +1,11 @@
+{
+  "name": "js-master",
+  "version": "1.0.0",
+  "description": "Результаты тестов:   1. test_html.jpg - результаты теста по html   2. test_js.jpg - результаты теста по javascript",
+  "main": "1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
