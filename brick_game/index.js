@@ -14,32 +14,34 @@ function CreateLBoard()
 	document.getElementById('lboard').innerHTML = '';
 	for (i = lead.length-1; i >= 0; i--)
 	{
-		document.getElementById('lboard').innerHTML += '<div>' + lead[i][1] + '</div>';
-	}
+		document.getElementById('lboard').innerHTML += '<div>' + 
+		lead[i][0] + " -> " + lead[i][1] +
+		'</div>';
+	}	
 }
 
 function getGET()
 {	
 	var xhr = new XMLHttpRequest();
+	xhr.onload = ()=>{
+		//console.log(xhr.responseText);
+        lead = JSON.parse(xhr.responseText);
+		CreateLBoard();
+    };
 	xhr.open("GET", '/data', true);
-	xhr.onreadystatechange = function () {
-      		if (this.readyState != 4) return;
-	};
-	let data = xhr.responseText;
-	console.log(data);
-	lead = data.mas;
-}
+	xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+	xhr.send();
+}getGET();
 
-function getPOST()
+function getPOST(then)
 {
+	var body = JSON.stringify(lead);
 	var xhr = new XMLHttpRequest();
-    	var body = JSON.stringify({"mas" : lead});
-    	xhr.open("POST", "/");
-    	xhr.setRequestHeader('Content-Type', 'application/json');
-	xhr.send(body);
-
+	xhr.onload = then;
+    xhr.open("POST", "/");
+    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+    xhr.send(body);
 }
-
 
 function timer()
 {
@@ -56,12 +58,11 @@ function timer()
 		var val = String(document.getElementById('t1').value)
 		var s = "Your score: " + val + ". Write your name."
 		var rez = prompt(s);
-		var name = val + " -> " + rez;
+		var name = rez;
 		if (rez!=null) 
 		{
 			lead.push([Number(val),name]);
-			getPOST();
-			getGET();
+			getPOST(function(){getGET();});
 		}
 		CreateLBoard();
 		pause = true;

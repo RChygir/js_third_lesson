@@ -43,16 +43,20 @@ function processPost(req, res, postData)
 {
 	let data;
 	try {
+		//console.log(`POSTdata = ${postData}`);
 		data = JSON.parse(postData);
-		MySort(data.mas);
 		res.statusCode = 201;
-		data = JSON.parse(data);
-		fs.writeFile('./results.json', JSON.stringify(data));
+		fs.writeFile('./results.json', JSON.stringify(data), err=>{
+			if(err) {
+				res.statusCose = 400;
+			}
+			res.end();
+		});
 	}
 	catch (e){
 		res.statusCose = 400;
+		res.end();
 	}
-	res.end();
 }
 
 function processGet(req, res)
@@ -63,9 +67,19 @@ function processGet(req, res)
 		filePath = "./brick_game/index.html"
 	}
 	else if (filePath.includes('/data')) {
-		let data = fs.readFile('./results.json');
-		res.setHeader("Content-Type", 'application/json');
-		res.end(data);
+		console.log("RF");
+		fs.readFile('./results.json', (err, data)=>{
+			console.log("ERF");
+			res.setHeader("Content-Type", 'application/json');
+			let arr = JSON.parse(data);
+			arr.sort((a,b)=> {
+				if(a[0] < b[0]) return -1;
+				else if(a[0] > b[0]) return 1;
+				return 0;
+			});
+			res.end(JSON.stringify(arr));
+		});
+		return;
 	}
 	else {
 		filePath = "./brick_game/" + filePath;
@@ -77,17 +91,5 @@ function processGet(req, res)
 	let readStream = fs.createReadStream(filePath);
 	readStream.pipe(res);
 };
-
-function MySort(lead)
-{
-	for (i = 1; i < lead.length; i++)
-		for (j = 1; j < lead.length; j++)
-			if (parseInt(lead[j][0]) < parseInt(lead[j-1][0]))
-			{
-				var tmp = lead[j];
-				lead[j] = lead[j-1];
-				lead[j-1] = tmp;
-			}
-}
 
 server.listen(80);
